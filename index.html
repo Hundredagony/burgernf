@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get Started</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #dce5f7, #f1f4f9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      width: 80%;
+      max-width: 1000px;
+      height: 500px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      display: flex;
+      overflow: hidden;
+    }
+
+    .left {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .left h1 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .left p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .left .btn {
+      padding: 14px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      background-color: #0067c0;
+      border: 2px solid #004a99;
+      border-radius: 8px;
+      text-decoration: none;
+      width: fit-content;
+      transition: background-color 0.3s ease;
+    }
+
+    .left .btn:hover {
+      background-color: #0051a3;
+    }
+
+    .right {
+      flex: 1;
+      background: url('') no-repeat center center/contain;
+      background-color: #eef2f7;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .right {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="left">
+      <h1>Hi Nurse!</h1>
+      <p>Let's make sure everything is set up<br>how you want it.</p>
+      <a href="index.html" class="btn">Get started</a>
+    </div>
+    <div class="right">
+      <!-- Image will appear here -->
+    </div>
+  </div>
+
+</body>
+</html>

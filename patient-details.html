@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+        body {
+            background: url('bg.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.598);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            color: rgb(7, 3, 3);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 { font-size: 22px; margin-bottom: 12px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
+
+        .details {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .details span {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .btn {
+            background: #dfe3e8;
+            color: rgb(10, 130, 227);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn:hover { background: #0056b3; }
+
+        .top-buttons {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .top-buttons .btn {
+            padding: 10px 20px;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-buttons">
+        <button class="btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        <button class="btn" onclick="window.location.href='view-patients.html'">👥 View Patients</button>
+    </div>
+
+    <div class="container">
+        <h1>Patient Details</h1>
+        <div class="details" id="patientDetails">
+            <!-- Patient details will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+ const urlParams = new URLSearchParams(window.location.search);
+ const patientIndex = urlParams.get('index');// Get index from URL parameters
+        const patients = JSON.parse(localStorage.getItem('patients')) || []; // Fetch patients from localStorage
+
+        // Check if we have a valid patient index and data
+        if (patientIndex !== null && patients[patientIndex]) {
+            const patient = patients[patientIndex]; // Fetch the specific patient data
+            const detailsContainer = document.getElementById('patientDetails');
+            
+            // Display patient details dynamically
+   // Display patient details dynamically
+detailsContainer.innerHTML = `
+    <p><span>Name:</span> ${patient.name}</p>
+    <p><span>Age:</span> ${patient.age}</p>
+    <p><span>Gender:</span> ${patient.gender}</p>
+    <p><span>Admission Date:</span> ${patient.admissionDate}</p>   <!-- Correct field name -->
+    <p><span>Medical Record Number:</span> ${patient.medicalRecordNo}</p>
+    <p><span>Allergies:</span> ${patient.allergies}</p>
+    <p><span>Primary Language:</span> ${patient.language}</p>
+    <p><span>Chief Complaint:</span> ${patient.chiefComplaint}</p>
+    <p><span>Past Medical History:</span> ${patient.pastMedicalHistory}</p>
+    <p><span>Social History:</span> ${patient.socialHistory}</p>
+    <p><span>Vital Signs:</span> ${patient.vitalSigns}</p>
+    <p><span>Physical Examination:</span> ${patient.physicalExam}</p>
+    <p><span>Diagnosis:</span> ${patient.diagnosis}</p>
+    <p><span>Current Medications:</span> ${patient.currentMedications}</p>
+    <p><span>Procedures:</span> ${patient.procedures}</p>
+    <p><span>Lab Tests:</span> ${patient.labTests}</p>
+    <p><span>Diet:</span> ${patient.diet}</p>
+    <p><span>Doctor’s Orders:</span> ${patient.doctorsOrders}</p>
+  
+`;
+
+        } else {
+            // If no valid index or data, show an alert and redirect
+            alert('Patient not found');
+            window.location.href = 'view-patients.html'; // Redirect back to patients list
+        }
+    </script>
+
+</body>
+</html>

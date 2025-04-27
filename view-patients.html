@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patients</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Arial', sans-serif; 
+        }
+
+        body {
+            background: url('bg.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            padding: 20px;
+            overflow: hidden; /* Prevent scrolling issues */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 450px; /* Fixed width */
+            height: 500px; /* Fixed height */
+            text-align: center;
+            backdrop-filter: blur(10px);
+            color: rgb(8, 0, 0);
+            overflow-y: auto;
+            animation: fadeIn 1s ease;
+            margin-bottom: 80px; /* Add bottom margin to prevent overlap */
+        }
+
+        h1 { 
+            font-size: 26px; 
+            margin-bottom: 20px; 
+            color: #007BFF; 
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .top-buttons .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 30px;
+            background-color: rgba(0, 123, 255, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .top-buttons .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #searchBtn {
+            background-color: rgba(0, 123, 255, 0.7);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #searchBtn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            display: none; 
+            animation: fadeIn 0.5s ease;
+        }
+
+        input[type="search"] {
+            padding: 12px 20px;
+            width: 70%;
+            font-size: 16px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            transition: width 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="search"]:focus {
+            width: 80%;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .patient-card {
+            background: rgba(255, 255, 255, 0.824);
+            margin: 12px;
+            padding: 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .patient-card:hover {
+            background-color: rgba(0, 123, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .patient-card p {
+            margin: 8px 0;
+        }
+
+        .patient-card span {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-buttons">
+        <button class="btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        <!-- Search Button (Centered between the two) -->
+        <button id="searchBtn" onclick="toggleSearchBar()">🔍 Search</button>
+        <button class="btn" onclick="window.location.href='input-patient.html'">➕ Add Patient</button>
+    </div>
+
+    <div class="container">
+        <h1>Patient List</h1>
+
+        <!-- Search Bar (Initially hidden) -->
+        <div class="search-container" id="searchBarContainer">
+            <input type="search" id="searchBar" placeholder="Search by name..." oninput="searchPatients()">
+        </div>
+
+        <div id="patientsList">
+            <!-- Patient cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function toggleSearchBar() {
+            const searchBarContainer = document.getElementById('searchBarContainer');
+            // Toggle visibility of the search bar
+            searchBarContainer.style.display = searchBarContainer.style.display === 'none' || searchBarContainer.style.display === '' ? 'block' : 'none';
+        }
+
+        function displayPatients(patients) {
+            const patientsList = document.getElementById('patientsList');
+            patientsList.innerHTML = ''; // Clear previous results
+
+            if (patients.length === 0) {
+                patientsList.innerHTML = '<p>No patients found</p>';
+                return;
+            }
+
+            patients.forEach((patient, index) => {
+                const patientCard = document.createElement('div');
+                patientCard.classList.add('patient-card');
+                patientCard.innerHTML = `
+                    <p><span>Name:</span> ${patient.name}</p>
+                    <p><span>Age:</span> ${patient.age}</p>
+                    <p><span>Gender:</span> ${patient.gender}</p>
+                    <p><span>Admission Date:</span> ${patient.dateAdmission}</p>
+                `;
+                
+                // Make the card clickable and redirect to the patient's details
+                patientCard.addEventListener('click', () => {
+                    window.location.href = `patient-details.html?index=${index}`;
+                });
+
+                patientsList.appendChild(patientCard);
+            });
+        }
+
+        function searchPatients() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const patients = JSON.parse(localStorage.getItem('patients')) || [];
+            const filteredPatients = patients.filter(patient =>
+                patient.name.toLowerCase().includes(query)
+            );
+            displayPatients(filteredPatients);
+        }
+
+        // Display all patients initially
+        displayPatients(JSON.parse(localStorage.getItem('patients')) || []);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Patient Data</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: url('bg.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4A90E2;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background: rgba(240, 240, 240, 0.8);
+            color: #333;
+        }
+
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover { 
+            background: #0056b3; 
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .top-buttons .btn {
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        input[type="datetime-local"] {
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .medications-list {
+            text-align: left;
+            padding-left: 20px;
+            margin-top: 10px;
+            color: #444;
+        }
+
+        .medications-list ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .medications-list li {
+            margin-bottom: 5px;
+        }
+
+        .upload-image {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .upload-image input[type="file"] {
+            padding: 8px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-buttons">
+        <button class="btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        <button class="btn" onclick="window.location.href='view-patients.html'">📂 View Patients</button>
+    </div>
+
+    <div class="container">
+        <h1>Enter Patient Data</h1>
+        <form id="patientForm">
+            <input type="text" id="name" placeholder="Patient Name" required>
+            <input type="number" id="age" placeholder="Age">
+            <input type="radio" id="genderMale" name="gender" value="Male"> Male
+            <input type="radio" id="genderFemale" name="gender" value="Female"> Female
+            <input type="radio" id="genderOther" name="gender" value="Other"> Other
+            <input type="datetime-local" id="admissionDate" placeholder="Date & Time of Admission">
+            <input type="text" id="medicalRecordNo" placeholder="Medical Record Number" readonly>
+            <input type="text" id="allergies" placeholder="Allergies">
+            <input type="text" id="language" placeholder="Primary Language">
+            
+            <textarea id="chiefComplaint" placeholder="Chief Complaint"></textarea>
+            <textarea id="pastMedicalHistory" placeholder="Past Medical History"></textarea>
+            <div class="medications-list">
+                <label for="medications">Medications:</label>
+                <ul>
+                    <li><input type="text" id="medication1" placeholder="Medication 1"></li>
+                    <li><input type="text" id="medication2" placeholder="Medication 2"></li>
+                    <li><input type="text" id="medication3" placeholder="Medication 3"></li>
+                </ul>
+            </div>
+            <textarea id="socialHistory" placeholder="Social History"></textarea>
+
+            <textarea id="vitalSigns" placeholder="Vital Signs"></textarea>
+            <textarea id="physicalExam" placeholder="Physical Examination"></textarea>
+            <textarea id="diagnosis" placeholder="Diagnosis"></textarea>
+            <textarea id="currentMedications" placeholder="Current Medications (In Hospital)"></textarea>
+            <textarea id="procedures" placeholder="Procedures"></textarea>
+            <textarea id="labTests" placeholder="Laboratory/Diagnostic Tests"></textarea>
+            <textarea id="diet" placeholder="Diet"></textarea>
+            <textarea id="doctorsOrders" placeholder="Doctor’s Orders"></textarea>
+
+
+            <button type="submit" class="btn">Save Patient</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('patientForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Generate random MRN
+            const randomNum = Math.floor(Math.random() * 1000000);
+
+            // Get form values
+            function getValue(id) {
+                let value = document.getElementById(id).value.trim();
+                return value === "" ? "N/A" : value;
+            }
+
+            const patient = {
+    name: getValue('name'),
+    age: getValue('age'),
+    gender: document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "N/A",
+    admissionDate: getValue('admissionDate'),  // <-- Ensure this is correctly saved
+    medicalRecordNo: `MRN-${randomNum}`,
+    allergies: getValue('allergies'),
+    language: getValue('language'),
+    chiefComplaint: getValue('chiefComplaint'),
+    pastMedicalHistory: getValue('pastMedicalHistory'),
+    medications: [
+        getValue('medication1'),
+        getValue('medication2'),
+        getValue('medication3')
+    ],
+    socialHistory: getValue('socialHistory'),
+    vitalSigns: getValue('vitalSigns'),
+    physicalExam: getValue('physicalExam'),
+    diagnosis: getValue('diagnosis'),
+    currentMedications: getValue('currentMedications'),
+    procedures: getValue('procedures'),
+    labTests: getValue('labTests'),
+    diet: getValue('diet'),
+    doctorsOrders: getValue('doctorsOrders'),
+
+};
+
+
+            let patients = JSON.parse(localStorage.getItem('patients')) || [];
+            patients.push(patient);
+            localStorage.setItem('patients', JSON.stringify(patients));
+
+            alert('Patient data saved!');
+            window.location.href = 'view-patients.html';
+        });
+    </script>
+
+</body>
+</html>

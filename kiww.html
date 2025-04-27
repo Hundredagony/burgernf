@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        /* Same styles as before */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: Arial, sans-serif; 
+        }
+
+        body {
+            background: url('bg.png') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 50, 0.9);
+            padding: 12px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .navbar .logo img {
+            height: 95px;
+            margin-right: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-links a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+        }
+
+        .search-container {
+            position: absolute;
+            top: 30%;
+            text-align: center;
+            width: 50%;
+            max-width: 700px; 
+            background: rgba(255, 255, 255, 0.25);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            color: black;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            color: black;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            background: white;
+            border-color: #007BFF;
+        }
+
+        #searchResults {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+            display: none;
+            text-align: left;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        #searchResults li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        #searchResults li:hover {
+            background: #007BFF;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .search-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .search-bar {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            #searchResults li {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="Hospital Logo">
+            <span>Hospital System</span>
+        </div>
+        <div class="nav-links">
+            <a href="view-patients.html">📂 View Patients</a>
+            <a href="input-patient.html">➕ Add Patient</a>
+            <a href="mission-vision.html">❗ About </a>
+        </div>
+    </div>
+
+    <!-- Welcome & Search -->
+    <div class="search-container">
+        <h1>Welcome to the Hospital Management System</h1>
+        <p>Manage patient data efficiently with our easy-to-use platform.</p>
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search for a patient..." oninput="searchPatients()">
+        <ul id="searchResults"></ul>
+    </div>
+
+    <script>
+        function searchPatients() {
+            const query = document.getElementById("searchBar").value.toLowerCase();
+            const resultsList = document.getElementById("searchResults");
+            resultsList.innerHTML = ""; // Clear previous results
+    
+            if (!query) {
+                resultsList.style.display = "none"; // Hide if no input
+                return;
+            }
+    
+            const patients = JSON.parse(localStorage.getItem("patients")) || [];
+            const filteredPatients = patients.filter(patient =>
+                patient.name.toLowerCase().includes(query)
+            );
+    
+            if (filteredPatients.length === 0) {
+                resultsList.style.display = "none"; // Hide if no matching patients
+                return;
+            }
+    
+            filteredPatients.forEach((patient, index) => {
+                const li = document.createElement("li");
+                li.textContent = patient.name;
+                li.onclick = () => {
+                    window.location.href = "patient-details.html?index=" + index; // Pass index in URL
+                };
+                resultsList.appendChild(li);
+            });
+    
+            resultsList.style.display = "block"; // Show results
+        }
+    </script>
+
+</body>
+</html>
